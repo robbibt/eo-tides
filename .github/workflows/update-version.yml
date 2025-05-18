@@ -36,7 +36,7 @@ jobs:
       - name: Commit changes
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: "Bump version to ${{ env.NEW_VERSION }}"
+          commit_message: "Bump version to ${{ env.NEW_VERSION }} [skip ci]"
           file_pattern: 'pyproject.toml uv.lock'
       
       - name: Create Release
