@@ -25,6 +25,9 @@ jobs:
           python-version: "3.10"
           resolution: "highest"
 
+      - name: Update `uv` lockfile
+        run: uv lock --upgrade
+
       - name: Update changelog
         uses: stefanzweifel/changelog-updater-action@v1
         with:
