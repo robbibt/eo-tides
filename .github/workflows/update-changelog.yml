@@ -19,6 +19,12 @@ jobs:
           ref: ${{ github.event.release.target_commitish }}
           fetch-depth: 0  # Needed so create-pull-request can diff
 
+      - name: Set up the environment
+        uses: ./.github/actions/setup-python-env
+        with:
+          python-version: "3.10"
+          resolution: "highest"
+
       - name: Update changelog
         uses: stefanzweifel/changelog-updater-action@v1
         with:
@@ -32,8 +38,10 @@ jobs:
           title: "Update changelog for ${{ github.event.release.tag_name }}"
           body: |
             This PR updates the changelog with details from the release [${{ github.event.release.tag_name }}](${{ github.event.release.html_url }}).
-          commit-message: "Update changelog for ${{ github.event.release.tag_name }}"
+          commit-message: "Update changelog for ${{ github.event.release.tag_name }} ["
           branch: update-changelog-${{ github.event.release.tag_name }}
           base: ${{ github.event.release.target_commitish }}
-          add-paths: docs/changelog.md
+          add-paths: |
+              docs/changelog.md
+              uv.lock
           delete-branch: true
