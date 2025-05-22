@@ -26,18 +26,14 @@ jobs:
           release-notes: ${{ github.event.release.body }}
           path-to-changelog: docs/changelog.md
 
-      # - name: Commit changelog update
-      #   uses: stefanzweifel/git-auto-commit-action@v5
-      #   with:
-      #     commit_message: "Update changelog for ${{ github.event.release.tag_name }}"
-      #     file_pattern: docs/changelog.md
-
-      - name: Create Pull Request
+      - name: Create pull request
         uses: peter-evans/create-pull-request@v5
         with:
           title: "Update changelog for ${{ github.event.release.tag_name }}"
           body: |
             This PR updates the changelog with details from the release [${{ github.event.release.tag_name }}](${{ github.event.release.html_url }}).
           commit-message: "Update changelog for ${{ github.event.release.tag_name }}"
+          branch: update-changelog-${{ github.event.release.tag_name }}
           base: ${{ github.event.release.target_commitish }}
           add-paths: docs/changelog.md
+          delete-branch: true
