@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.2.0 - 2025-05-22
+
+**Full Changelog**: https://github.com/robbibt/eo-tides/compare/1.1.0...1.2.0
+
 ## 1.0.4 - 2025-05-22
 
 Test of changelog
