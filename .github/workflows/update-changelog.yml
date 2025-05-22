@@ -1,0 +1,49 @@
+name: Update changelog
+
+on:
+  release:
+    types: [released]
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.release.target_commitish }}
+          fetch-depth: 0  # Ensure we can create a new branch
+
+      - name: Create new branch
+        run: |
+          BRANCH_NAME="update-changelog-${{ github.event.release.tag_name }}"
+          git checkout -b "$BRANCH_NAME"
+          echo "BRANCH_NAME=$BRANCH_NAME" >> $GITHUB_ENV
+
+      - name: Update changelog
+        uses: stefanzweifel/changelog-updater-action@v1
+        with:
+          latest-version: ${{ github.event.release.tag_name }}
+          release-notes: ${{ github.event.release.body }}
+          path-to-changelog: docs/changelog.md
+
+      - name: Commit updated changelog
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          branch: ${{ env.BRANCH_NAME }}
+          commit_message: "Update changelog for ${{ github.event.release.tag_name }}"
+          file_pattern: docs/changelog.md
+
+      - name: Create pull request
+        uses: peter-evans/create-pull-request@v5
+        with:
+          branch: ${{ env.BRANCH_NAME }}
+          base: ${{ github.event.release.target_commitish }}
+          title: "Update changelog for ${{ github.event.release.tag_name }}"
+          body: |
+            This PR updates the changelog with details from the release [${{ github.event.release.tag_name }}](${{ github.event.release.html_url }}).
