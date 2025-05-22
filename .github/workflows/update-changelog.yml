@@ -23,6 +23,7 @@ jobs:
         run: |
           BRANCH_NAME="update-changelog-${{ github.event.release.tag_name }}"
           git checkout -b "$BRANCH_NAME"
+          git push origin "$BRANCH_NAME"
           echo "BRANCH_NAME=$BRANCH_NAME" >> $GITHUB_ENV
 
       - name: Update changelog
